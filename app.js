@@ -60,6 +60,10 @@ function solveOptimization(truck, orders) {
 app.post('/api/v1/load-optimizer/optimize', (req, res) => {
     const { truck, orders } = req.body;
 
+    if (!truck?.id || truck.max_weight_lbs <= 0 || truck.max_volume_cuft <= 0) {
+        return res.status(400).json({ error: "Invalid input schema or parameters" });
+    }
+
     const result = solveOptimization(truck, orders);
 
     const weightUtil = ((result.weight / truck.max_weight_lbs) * 100).toFixed(2);
